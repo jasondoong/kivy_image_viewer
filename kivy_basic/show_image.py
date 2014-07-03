@@ -8,10 +8,9 @@ from kivy.uix.image import AsyncImage
 from kivy.app import App
 from kivy.core.window import Window
 from kivy_basic import images_finder
+from kivy_basic import bidirection_iterator
 import sys
 import os
-from itertools import cycle
-from itertools import dropwhile
 
 class ShowAPhoto(BoxLayout):
     
@@ -36,14 +35,16 @@ class ShowAPhoto(BoxLayout):
     def prepare_list(self,filepath):
     	folderpath = os.path.dirname(filepath)+'/'
         file_list = images_finder.list_all_images_in_folder(folderpath)
-        cycled= cycle(file_list)
-        if filepath != './':
-            cycled = dropwhile(lambda x: x != filepath, cycled)
-        self.file_iterator = cycled
+        iterator= bidirection_iterator.BidirectionIterator(file_list)
+        iterator.move_before(filepath)
+        self.file_iterator = iterator
         
         
     def get_next_file(self):
         return self.file_iterator.next();
+        
+    def get_previous_file(self):
+        return self.file_iterator.previous();
  
     def _keyboard_closed(self):
         print('My keyboard have been closed')
@@ -51,7 +52,11 @@ class ShowAPhoto(BoxLayout):
         self._keyboard = None
         
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        self.aimage.source = self.get_next_file()
+        if keycode[1] == 'left':
+            self.aimage.source = self.get_previous_file()
+        else:
+            self.aimage.source = self.get_next_file()
+        
         
 class MyApp(App):
     
