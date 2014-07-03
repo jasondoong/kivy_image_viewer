@@ -10,6 +10,7 @@ from kivy.core.window import Window
 from kivy_basic import images_finder
 import sys
 import os
+from itertools import cycle
 
 class ShowAPhoto(BoxLayout):
     
@@ -34,15 +35,13 @@ class ShowAPhoto(BoxLayout):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
     
     def prepare_list(self,folderpath):
-        self.file_list = images_finder.list_all_images_in_folder(folderpath)
+        file_list = images_finder.list_all_images_in_folder(folderpath)
+        self.file_iterator = cycle(file_list)
         
         
     def get_next_file(self):
-        self.file_index = self.file_index + 1
-        if self.file_index >= len(self.file_list):
-            self.file_index = 0
-        return self.file_list[self.file_index]
-    
+        return self.file_iterator.next();
+ 
     def _keyboard_closed(self):
         print('My keyboard have been closed')
         self._keyboard.unbind(on_key_down=self._on__keyboard_down)
