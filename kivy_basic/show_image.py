@@ -36,7 +36,8 @@ class ShowAPhoto(BoxLayout):
     	folderpath = os.path.dirname(filepath)+'/'
         file_list = images_finder.list_all_images_in_folder(folderpath)
         iterator= bidirection_iterator.BidirectionIterator(file_list)
-        iterator.move_before(filepath)
+        if filepath != './':
+            iterator.move_before(filepath)
         self.file_iterator = iterator
         
         
