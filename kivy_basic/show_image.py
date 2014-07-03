@@ -11,6 +11,7 @@ from kivy_basic import images_finder
 import sys
 import os
 from itertools import cycle
+from itertools import dropwhile
 
 class ShowAPhoto(BoxLayout):
     
@@ -21,12 +22,10 @@ class ShowAPhoto(BoxLayout):
         image_list = images_finder.find_all_images_in_list(sys.argv)
         
         if len(image_list)>0:
-            folderpath = os.path.dirname(image_list[0])+'/'
-            print("folderpath is "+folderpath )
+            self.prepare_list(image_list[0])
         else:
-            folderpath = './'
-            
-        self.prepare_list(folderpath)
+            self.prepare_list('./')
+                    
         self.aimage = AsyncImage(source=self.get_next_file())
         
         self.add_widget(self.aimage)
@@ -34,9 +33,13 @@ class ShowAPhoto(BoxLayout):
         self._keyboard = Window.request_keyboard(self._keyboard_closed,self,'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
     
-    def prepare_list(self,folderpath):
+    def prepare_list(self,filepath):
+    	folderpath = os.path.dirname(filepath)+'/'
         file_list = images_finder.list_all_images_in_folder(folderpath)
-        self.file_iterator = cycle(file_list)
+        cycled= cycle(file_list)
+        if filepath != './':
+            cycled = dropwhile(lambda x: x != filepath, cycled)
+        self.file_iterator = cycled
         
         
     def get_next_file(self):
