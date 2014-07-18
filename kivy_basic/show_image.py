@@ -7,6 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import AsyncImage
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.base import EventLoop
 from kivy_basic import images_finder
 from kivy_basic import bidirection_iterator
 import sys
@@ -26,12 +27,15 @@ class ShowAPhoto(BoxLayout):
             self.prepare_list('./')
                     
         self.aimage = AsyncImage(source=self.get_next_file())
-        
+        self.aimage.bind(source=self._on_image_load)
         self.add_widget(self.aimage)
         
         self._keyboard = Window.request_keyboard(self._keyboard_closed,self,'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
     
+    def _on_image_load(self,image,source):
+        EventLoop.window.title = source
+        
     def prepare_list(self,filepath):
     	folderpath = os.path.dirname(filepath)+'/'
         file_list = images_finder.list_all_images_in_folder(folderpath)
