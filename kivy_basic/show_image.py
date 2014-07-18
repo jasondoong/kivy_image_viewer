@@ -34,10 +34,13 @@ class ShowAPhoto(BoxLayout):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
     
     def _on_image_load(self,image,source):
-        EventLoop.window.title = source
+        self.set_app_title(source)
         
+    def set_app_title(self, title):
+        EventLoop.window.title = title
+
     def prepare_list(self,filepath):
-    	folderpath = os.path.dirname(filepath)+'/'
+        folderpath = os.path.dirname(filepath)+'/'
         file_list = images_finder.list_all_images_in_folder(folderpath)
         iterator= bidirection_iterator.BidirectionIterator(file_list)
         if filepath != './':
@@ -46,10 +49,10 @@ class ShowAPhoto(BoxLayout):
         
         
     def get_next_file(self):
-        return self.file_iterator.next();
+        return self.file_iterator.next()
         
     def get_previous_file(self):
-        return self.file_iterator.previous();
+        return self.file_iterator.previous()
  
     def _keyboard_closed(self):
         print('My keyboard have been closed')
@@ -66,7 +69,11 @@ class ShowAPhoto(BoxLayout):
 class MyApp(App):
     
     def build(self):
-        return ShowAPhoto()
+        layout = ShowAPhoto()
+        self.title = self.get_image_pathlayout(layout)
+        return layout
+    def get_image_pathlayout(self,layout):
+        return layout.aimage.source
 
 if __name__ == "__main__":
     MyApp().run()
