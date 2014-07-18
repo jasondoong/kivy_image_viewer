@@ -9,13 +9,13 @@ import os
 includes_extentions = ['jpg','bmp','png','gif','JPG','BMP','GIF']
 
 def list_all_images_in_folder(folder_path):
-    list = []
+    out = []
     for fn in os.listdir(folder_path):
         for ext in includes_extentions:
             if fn.endswith(ext):
                 print(folder_path+fn)
-                list.append(folder_path+fn)
-    return sorted(list)
+                out.append(folder_path+fn)
+    return sorted(out)
 
 def find_all_images_in_list(input_list):
     out = []
@@ -24,3 +24,18 @@ def find_all_images_in_list(input_list):
             if fn.endswith(ext):
                 out.append(fn)
     return sorted(out)
+
+
+def is_images_contained(input_list):
+    image_list = find_all_images_in_list(input_list)
+    if len(image_list) > 0:
+        return True
+    else:
+        return False
+
+
+def find_fist_images_in_list(input_list):
+    image_list = find_all_images_in_list(input_list)
+    return image_list[0]
+
+

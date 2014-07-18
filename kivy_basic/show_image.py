@@ -18,21 +18,27 @@ class ShowAPhoto(BoxLayout):
     def __init__(self, **kwargs):
         super(ShowAPhoto,self).__init__(**kwargs)
         
-        self.file_index = -1
-        image_list = images_finder.find_all_images_in_list(sys.argv)
-        
-        if len(image_list)>0:
-            self.prepare_list(image_list[0])
+        self.prepare_image_list()
+        self.add_image_widget()
+        self.register_keydown_event()
+
+    def prepare_image_list(self):
+        if(images_finder.is_images_contained(sys.argv)) :
+            image_arg = images_finder.find_fist_images_in_list(sys.argv)
+            self.prepare_list(image_arg)
         else:
             self.prepare_list('./')
-                    
+
+    def add_image_widget(self):
         self.aimage = AsyncImage(source=self.get_next_file())
         self.aimage.bind(source=self._on_image_load)
         self.add_widget(self.aimage)
-        
-        self._keyboard = Window.request_keyboard(self._keyboard_closed,self,'text')
+
+
+    def register_keydown_event(self):
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self, 'text')
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
-    
+
     def _on_image_load(self,image,source):
         self.set_app_title(source)
         
