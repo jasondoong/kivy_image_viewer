@@ -15,7 +15,7 @@ def list_all_images_in_folder(folder_path):
             if fn.endswith(ext):
                 print(folder_path+fn)
                 list.append(folder_path+fn)
-    return list
+    return sorted(list)
 
 def find_all_images_in_list(input_list):
     out = []
@@ -23,4 +23,4 @@ def find_all_images_in_list(input_list):
         for ext in includes_extentions:
             if fn.endswith(ext):
                 out.append(fn)
-    return out
+    return sorted(out)
