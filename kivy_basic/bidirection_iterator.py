@@ -7,13 +7,13 @@ Created on Jun 28, 2014
 class BidirectionIterator:
     
     def __init__(self, list):
-		self.list = list
-		self.list_size = len(list)
-		self.index = -1
+        self.list = list
+        self.list_size = len(list)
+        self.index = -1
     
     def next(self):
-    	self.__increase_index()
-    	return self.list[self.index]
+        self.__increase_index()
+        return self.list[self.index]
         
         
     def previous(self):
@@ -28,8 +28,8 @@ class BidirectionIterator:
     
     def __increase_index(self):
         self.index = self.index + 1
-    	if self.index >= self.list_size :
-    	  self.index = 0
+        if self.index >= self.list_size :
+            self.index = 0
     
     def __decrease_index(self):
         self.index = self.index -1

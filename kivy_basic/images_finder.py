@@ -13,7 +13,6 @@ def list_all_images_in_folder(folder_path):
     for fn in os.listdir(folder_path):
         for ext in includes_extentions:
             if fn.endswith(ext):
-                print(folder_path+fn)
                 out.append(folder_path+fn)
     return sorted(out)
 
